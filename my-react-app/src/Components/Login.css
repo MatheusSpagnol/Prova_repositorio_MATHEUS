@@ -1,0 +1,21 @@
+body{
+    background-color: rgb(229, 203, 136);
+
+}
+
+form{
+    
+    display: center;
+    align-items: center;
+    height: auto;
+    margin-top: 30vh;
+    text-align: center;
+    margin-right: 10vh;
+    margin-left: 10vh;
+    font-size: 25px;
+    color:rgb(0, 0, 0) ;
+
+    border-radius: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+} 
+
