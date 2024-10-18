@@ -1,48 +1,141 @@
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import 'bootstrap/dist/css/bootstrap.css';
-import Css from '../Components/Login.css';
-import { useState, useEffect } from 'react';
+import Container from "react-bootstrap/esm/Container";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
+import Button from "react-bootstrap/Button";
+import Nav from "react-bootstrap/Nav";
+import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import styles from './Login.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import cad from './PagCadastroProduto';
-import { Link } from "react-router-dom";
+const url = "http://localhost:3000/usuarios";
 
-function BasicExample() {
+const Login = () => {
+  const navigate = useNavigate();
 
-    const [email, SetEmail] = useState('');
-    const [senha, SetSenha] = useState('');
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [alertaClass, setAlertaClass] = useState("mb-3 d-none");
+  const [alertaMensagem, setAlertaMensagem] = useState("");
+  const [alertaVariant, setAlertaVariant] = useState("danger");
 
-  if (email == "admin" && senha == "4321"){
-    <Link to="./Components/PagCadastro">página inicial</Link>
 
-  } else{
-    
+  const [usuarios, setUsuarios] = useState([]);
+
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch(url);
+        const users = await res.json();
+        setUsuarios(users);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    fetchData();
+    console.log(usuarios);
+  }, []);
+
+  const gravarLocalStorage = (usuario) =>{
+    localStorage.setItem("userName", usuario.nome)
+    localStorage.setItem("userEmail", usuario.email)   
   }
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const user = { email, senha };
+
+   
+    const userToFind = usuarios.find(
+      (userFind) => userFind.email == user.email
+    );
+
+    if (email != "") {
+      if (senha != "") {
+        if (userToFind != undefined && userToFind.senha == senha) {
+          console.log(userToFind);
+          console.log("entrou");
+          setAlertaClass("mb-3");
+          gravarLocalStorage(userToFind)
+          
+          
+
+          setAlertaMensagem("Login efetuado com Sucesso");
+          setAlertaVariant("success");
+          
+          navigate('/PagCadastroProduto')
+
+
+        } else {
+          setAlertaClass("mb-3");
+          setAlertaMensagem("Usuário ou senha inválidos");
+        }
+      } else {
+        setAlertaClass("mb-3");
+        setAlertaMensagem("O campo senha não pode ser vazio");
+      }
+    } else {
+      setAlertaClass("mb-3");
+      setAlertaMensagem("O campo email não pode ser vazio");
+    }
+  };
 
   return (
     <div>
-    <Form>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" />
-        
-      </Form.Group>
+      <Container>
+        <span className={`material-symbols-outlined, `} style={{ fontSize: "100px" }}>
+          login
+        </span>
+        <form onSubmit={handleLogin}>
+          {/* caixinha do email */}
+          <FloatingLabel
+            controlId="floatingInputEmail"
+            label="Email"
+            className="mb-3"
+          >
+            <Form.Control
+              type="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+          </FloatingLabel>
 
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-       
-      </Form.Group>
-      
-    </Form>
-    <Button variant="primary" type="submit">
-        Submit
-      </Button>
+          {/* caixinha da senha */}
+          <FloatingLabel
+            controlId="floatingPassword"
+            label="Senha"
+            className="mb-3"
+          >
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              value={senha}
+              onChange={(e) => {
+                setSenha(e.target.value);
+              }}
+            />
+          </FloatingLabel>
+
+          <Alert key="danger" variant={alertaVariant} className={alertaClass}>
+            {alertaMensagem}
+          </Alert>
+
+          <Button 
+          variant="primary" 
+          type="submit"
+          className={styles.btnCadastrar}>
+            Enviar
+          </Button>
+        </form>
+      </Container>
     </div>
   );
-}
+};
 
-export default BasicExample; 
+export default Login;

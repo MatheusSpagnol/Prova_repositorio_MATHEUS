@@ -1,4 +1,15 @@
 {
+    "usuarios": [
+    {
+      "id": "1",
+      "nome": "Docinho",
+      "email": "docemel@sodoce.com.br",
+      "senha": "brigadeiro123",
+      "tipo": "Doceiro"
+    }
+  ],
+
+
     "produto":[
         {
             

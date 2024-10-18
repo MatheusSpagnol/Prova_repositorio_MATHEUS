@@ -5,28 +5,23 @@ import Login from './Components/Longin'
 import PagCadastroProduto from './Components/PagCadastroProduto'
 import PagProduto from './Components/PagProduto'
 
-import NavBar from "./Components/NavBar.jsx"
+import BarNav from "./Components/BarNav.jsx"
 import { BrowserRouter, Route, Routes} from "react-router-dom"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <div className="App">
-      < Login />
-      {/* < PagCadastroProduto /> */}
-      {/* < PagProduto /> */}
+    <>  
       <BrowserRouter>
-        <NavBar />
         <Routes>
-          <Route path='/PagCadastroProduto' element={<PagCadastroProduto/>} />         
-          <Route path='/PagProduto' element={< PagProduto/>} />
-       
+          <Route path="/" element={<Login/>}/> 
+          <Route path="/PagProdutos" element={<PagProduto/>}/>
+          <Route path="/PagCastro" element={<PagCadastroProduto/>}/>
         </Routes>
-      </BrowserRouter>
 
-    </div>
+      </BrowserRouter>
+    </>
   );
 }
-
 export default App;
